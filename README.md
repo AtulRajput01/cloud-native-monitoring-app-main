@@ -1,6 +1,6 @@
 # **Cloud Native Resource Monitoring Python App on K8s!**
 
-## Things you will Learn 🤯
+## Things we will Learn...
 
 1. Python and How to create Monitoring Application in Python using Flask and psutil
 2. How to run a Python App locally.
@@ -13,9 +13,6 @@
 5. Learn Kubernetes and Create EKS cluster and Nodegroups
 6. Create Kubernetes Deployments and Services using Python!
 ```
-
-# **Youtube Video for step by step Demonstration!**
-https://youtu.be/kBWCsHEcWnc
 
 ## **Prerequisites** !
 
@@ -133,7 +130,7 @@ Push the Docker image to ECR using the push commands on the console:
 
 ```
  $ docker push <ecr_repo_uri>:<tag>
-```
+
 
 ## **Part 4: Creating an EKS cluster and deploying the app using Python**
 
@@ -147,7 +144,7 @@ Create a node group in the EKS cluster.
 
 ### **Step 3: Create deployment and service**
 
-```jsx
+jsx
 from kubernetes import client, config
 
 # Load Kubernetes configuration
@@ -157,53 +154,7 @@ config.load_kube_config()
 api_client = client.ApiClient()
 
 # Define the deployment
-deployment = client.V1Deployment(
-    metadata=client.V1ObjectMeta(name="my-flask-app"),
-    spec=client.V1DeploymentSpec(
-        replicas=1,
-        selector=client.V1LabelSelector(
-            match_labels={"app": "my-flask-app"}
-        ),
-        template=client.V1PodTemplateSpec(
-            metadata=client.V1ObjectMeta(
-                labels={"app": "my-flask-app"}
-            ),
-            spec=client.V1PodSpec(
-                containers=[
-                    client.V1Container(
-                        name="my-flask-container",
-                        image="568373317874.dkr.ecr.us-east-1.amazonaws.com/my-cloud-native-repo:latest",
-                        ports=[client.V1ContainerPort(container_port=5000)]
-                    )
-                ]
-            )
-        )
-    )
-)
 
-# Create the deployment
-api_instance = client.AppsV1Api(api_client)
-api_instance.create_namespaced_deployment(
-    namespace="default",
-    body=deployment
-)
-
-# Define the service
-service = client.V1Service(
-    metadata=client.V1ObjectMeta(name="my-flask-service"),
-    spec=client.V1ServiceSpec(
-        selector={"app": "my-flask-app"},
-        ports=[client.V1ServicePort(port=5000)]
-    )
-)
-
-# Create the service
-api_instance = client.CoreV1Api(api_client)
-api_instance.create_namespaced_service(
-    namespace="default",
-    body=service
-)
-```
 
 make sure to edit the name of the image on line 25 with your image Uri.
 
