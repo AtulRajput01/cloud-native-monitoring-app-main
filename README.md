@@ -12,9 +12,10 @@
 4. Create ECR repository using Python Boto3 and pushing Docker Image to ECR
 5. Learn Kubernetes and Create EKS cluster and Nodegroups
 6. Create Kubernetes Deployments and Services using Python!
-```
+
 file:///home/amazing_atul/Pictures/Screenshots/Screenshot%20from%202024-05-15%2014-13-09.png
 
+```
 
 
 
