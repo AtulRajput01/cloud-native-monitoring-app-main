@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: ai-planet-rollout
+spec:
+  replicas: 1 # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: ai-planet
+  template:
+    metadata:
+      labels:
+        app: ai-planet
+    spec:
+      containers:
+      - name: ai-planet-container
+        image: amazingatul/ai-planet:new-version # Update to the new Docker image
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+          requests:
+            cpu: "0.5"
+            memory: "256Mi"
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+        pause: {}
+      - setWeight: 40
+        pause: {}
+      - setWeight: 60
+        pause: {}
+      - setWeight: 80
+        pause: {}
+      - setWeight: 100
+        pause: {}
+  analysis:
+    templates:
+    - templateName: ai-planet-analysis
+      templateRef:
+        name: ai-planet-analysis-template
+  templateRef:
+    name: ai-planet-template
