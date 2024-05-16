@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-planet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-planet
+  template:
+    metadata:
+      labels:
+        app: ai-planet
+    spec:
+      containers:
+      - name: ai-planet-container
+        image: amazingatul/ai-planet:latest
+        ports:
+        - containerPort: 5000
+        resources: # Add this line
+          limits:
+            cpu: "1" # Add this line
+            memory: "512Mi" # Add this line
+          requests:
+            cpu: "0.5" # Add this line
+            memory: "256Mi" # Add this line
