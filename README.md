@@ -1,177 +1,77 @@
-# **Cloud Native Resource Monitoring Python App on K8s!**
+# Cloud Native Resource Monitoring Python App
 
-## Things we will Learn...
+### Introduction
 
-1. Python and How to create Monitoring Application in Python using Flask and psutil
-2. How to run a Python App locally.
-3. Learn Docker and How to containerize a Python application
-    1. Creating Dockerfile
-    2. Building DockerImage
-    3. Running Docker Container
-    4. Docker Commands
-4. Create ECR repository using Python Boto3 and pushing Docker Image to ECR
-5. Learn Kubernetes and Create EKS cluster and Nodegroups
-6. Create Kubernetes Deployments and Services using Python!
+This project aims to provide hands-on learning experience in developing and deploying a cloud-native resource monitoring Python application on Kubernetes (K8s). The aim of this assignment is to understand the hands-on experience with GitOps practices, utilizing Argo CD for continuous deployment and Argo Rollouts for advanced deployment strategies within a Kubernetes environment. You will be responsible for setting up a GitOps pipeline that automates the deployment and management of a simple web application. Key objectives include understanding Python for developing monitoring applications, Docker for containerization, AWS for hosting the application, and Kubernetes for orchestration.
 
-file:///home/amazing_atul/Pictures/Screenshots/Screenshot%20from%202024-05-15%2014-13-09.png
 
-```
+## Prerequisites
 
+Before starting the project, ensure you have the following prerequisites:
 
+- Familiarity with Kubernetes concepts (Pods, Deployments, Services).
+- Basic understanding of Docker and containerization.
+- Experience with Git for version control.
+- Access to a Kubernetes cluster for testing (you can use Minikube, kind, or a cloud provider's Kubernetes service).
+- Familiarity with Argo CD and Argo Rollouts tools. Refer to the documentation for the basics of these tools.
 
-## **Prerequisites** !
+Additionally, make sure you have the following installed:
 
-(Things to have before starting the projects)
+- AWS Account with programmatic access configured via AWS CLI.
+- Python3 installed on your local machine.
+- Docker and Kubectl installed.
+- A code editor such as Visual Studio Code.
 
-- [x]  AWS Account.
-- [x]  Programmatic access and AWS configured with CLI.
-- [x]  Python3 Installed.
-- [x]  Docker and Kubectl installed.
-- [x]  Code editor (Vscode)
 
-# ✨Let’s Start the Project ✨
+## Getting Started
 
-## **Part 1: Deploying the Flask application locally**
+### Part 1: Deploying the Flask Application Locally
 
-### **Step 1: Clone the code**
+#### Step 1: Clone the Repository
 
-Clone the code from the repository:
+Clone the repository using the following command:
 
-```
-$ git clone <repository_url>
-```
+ git clone https://github.com/AtulRajput01/cloud-native-resource-monitoring-app.git
 
-### **Step 2: Install dependencies**
 
-The application uses the **`psutil`** and **`Flask`, Plotly, boto3** libraries. Install them using pip:
+2. **Install Dependencies**
+- Install dependencies using pip:
+  ```
+  pip3 install -r requirements.txt
+  ```
 
-```
-pip3 install -r requirements.txt
-```
+3. **Run the Application Locally**
+- Navigate to the root directory of the project and execute:
+  ```
+  $ python3 app.py
+  ```
 
-### **Step 3: Run the application**
+# Overview of Using Argo CD for Continuous Deployment
 
-To run the application, navigate to the root directory of the project and execute the following command:
+## Setup and Configuration
 
-```
-$ python3 app.py
-```
+1. **Installation:** Argo CD is installed on the Kubernetes cluster following the official documentation.
+2. **Configuration:** Once installed, it's configured to monitor a specific Git repository containing Kubernetes manifests for the application.
 
-This will start the Flask server on **`localhost:5000`**. Navigate to [http://localhost:5000/](http://localhost:5000/) on your browser to access the application.
+## Creating the GitOps Pipeline
 
-## **Part 2: Dockerizing the Flask application**
+1. **Dockerization:** After dockerizing the application and pushing the Docker image to a container registry, Argo CD is set up to monitor changes in the repository.
+2. **Continuous Deployment:** Argo CD automatically deploys any changes pushed to the repository to the Kubernetes cluster, ensuring continuous deployment.
 
-### **Step 1: Create a Dockerfile**
+## Implementing a Canary Release with Argo Rollouts
 
-Create a **`Dockerfile`** in the root directory of the project with the following contents:
+1. **Extension Usage:** Argo Rollouts, an extension of Argo CD, is utilized to implement a canary release strategy.
+2. **Rollout Definition:** The rollout definition is modified to specify the canary release strategy, allowing for controlled testing of new versions of the application before full deployment.
 
-```
-# Use the official Python image as the base image
-FROM python:3.9-slim-buster
 
-# Set the working directory in the container
-WORKDIR /app
+![alt text](<Screenshot from 2024-05-16 16-59-45.png>)
+3. **Monitoring:** Changes to the application code trigger a rollout, with Argo Rollouts monitoring the deployment process to ensure the canary release completes successfully.
 
-# Copy the requirements file to the working directory
-COPY requirements.txt .
+![alt text](<Screenshot from 2024-05-16 16-06-56.png>)
 
-RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the application code to the working directory
-COPY . .
+Argo CD simplifies the deployment process by providing a centralized platform for managing application deployments in Kubernetes clusters. It promotes GitOps practices, enhancing collaboration and automation in the software development lifecycle.
 
-# Set the environment variables for the Flask app
-ENV FLASK_RUN_HOST=0.0.0.0
+## Documentation
 
-# Expose the port on which the Flask app will run
-EXPOSE 5000
-
-# Start the Flask app when the container is run
-CMD ["flask", "run"]
-```
-
-### **Step 2: Build the Docker image**
-
-To build the Docker image, execute the following command:
-
-```
-$ docker build -t <image_name> .
-```
-
-### **Step 3: Run the Docker container**
-
-To run the Docker container, execute the following command:
-
-```
-$ docker run -p 5000:5000 <image_name>
-```
-
-This will start the Flask server in a Docker container on **`localhost:5000`**. Navigate to [http://localhost:5000/](http://localhost:5000/) on your browser to access the application.
-
-## **Part 3: Pushing the Docker image to ECR**
-
-### **Step 1: Create an ECR repository**
-
-Create an ECR repository using Python:
-
-```
-import boto3
-
-# Create an ECR client
-ecr_client = boto3.client('ecr')
-
-# Create a new ECR repository
-repository_name = 'my-ecr-repo'
-response = ecr_client.create_repository(repositoryName=repository_name)
-
-# Print the repository URI
-repository_uri = response['repository']['repositoryUri']
-print(repository_uri)
-```
-
-### **Step 2: Push the Docker image to ECR**
-
-Push the Docker image to ECR using the push commands on the console:
-
-```
- $ docker push <ecr_repo_uri>:<tag>
-
-
-## **Part 4: Creating an EKS cluster and deploying the app using Python**
-
-### **Step 1: Create an EKS cluster**
-
-Create an EKS cluster and add node group
-
-### **Step 2: Create a node group**
-
-Create a node group in the EKS cluster.
-
-### **Step 3: Create deployment and service**
-
-jsx
-from kubernetes import client, config
-
-# Load Kubernetes configuration
-config.load_kube_config()
-
-# Create a Kubernetes API client
-api_client = client.ApiClient()
-
-# Define the deployment
-
-
-make sure to edit the name of the image on line 25 with your image Uri.
-
-- Once you run this file by running “python3 eks.py” deployment and service will be created.
-- Check by running following commands:
-
-```jsx
-kubectl get deployment -n default (check deployments)
-kubectl get service -n default (check service)
-kubectl get pods -n default (to check the pods)
-```
-
-Once your pod is up and running, run the port-forward to expose the service
-
-kubectl port-forward service/<service_name> 5000:5000
+[Link to Detailed Documentation](https://docs.google.com/document/d/1GRSvt9kFFUHPZhuZW7NYbihq1ClK47WMCGZVaMo9DRc/edit?usp=sharing)
