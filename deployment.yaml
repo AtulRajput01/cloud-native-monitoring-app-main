@@ -1,9 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  name: ai-planet
+  name: ai-planet-rollout
 spec:
-  replicas: 1
+  replicas: 1 # Adjust the number of replicas as needed
   selector:
     matchLabels:
       app: ai-planet
@@ -17,10 +17,30 @@ spec:
         image: amazingatul/ai-planet:latest
         ports:
         - containerPort: 5000
-        resources: # Add this line
+        resources:
           limits:
-            cpu: "1" # Add this line
-            memory: "512Mi" # Add this line
+            cpu: "1"
+            memory: "512Mi"
           requests:
-            cpu: "0.5" # Add this line
-            memory: "256Mi" # Add this line
+            cpu: "0.5"
+            memory: "256Mi"
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+        pause: {}
+      - setWeight: 40
+        pause: {}
+      - setWeight: 60
+        pause: {}
+      - setWeight: 80
+        pause: {}
+      - setWeight: 100
+        pause: {}
+  analysis:
+    templates:
+    - templateName: ai-planet-analysis
+      templateRef:
+        name: ai-planet-analysis-template
+  templateRef:
+    name: ai-planet-template
