@@ -4,6 +4,7 @@
 
 This project aims to provide hands-on learning experience in developing and deploying a cloud-native resource monitoring Python application on Kubernetes (K8s). The aim of this assignment is to understand the hands-on experience with GitOps practices, utilizing Argo CD for continuous deployment and Argo Rollouts for advanced deployment strategies within a Kubernetes environment. You will be responsible for setting up a GitOps pipeline that automates the deployment and management of a simple web application. Key objectives include understanding Python for developing monitoring applications, Docker for containerization, AWS for hosting the application, and Kubernetes for orchestration.
 
+![alt text](<Screenshot from 2024-05-16 19-25-56.png>)
 
 ## Prerequisites
 
