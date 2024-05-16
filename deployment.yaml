@@ -17,13 +17,13 @@ spec:
         image: amazingatul/ai-planet:latest
         ports:
         - containerPort: 5000
-        resources: # Add this line
+        resources: 
           limits:
-            cpu: "1" # Add this line
-            memory: "512Mi" # Add this line
+            cpu: "1" 
+            memory: "512Mi" 
           requests:
-            cpu: "0.5" # Add this line
-            memory: "256Mi" # Add this line
+            cpu: "0.5" 
+            memory: "256Mi" 
             ---
             apiVersion: argoproj.io/v1alpha1
             kind: Rollout
