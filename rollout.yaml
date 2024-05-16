@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: ai-planet-rollout
 spec:
-  replicas: 1 # Adjust the number of replicas as needed
+  replicas: 1
   selector:
     matchLabels:
       app: ai-planet
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ai-planet-container
-        image: amazingatul/ai-planet:new-version # Update to the new Docker image
+        image: amazingatul/ai-planet:new-version
         ports:
         - containerPort: 5000
         resources:
@@ -42,3 +42,4 @@ spec:
     - templateName: ai-planet-analysis
       templateRef:
         name: ai-planet-analysis-template
+    metadata: {} # Add the missing metadata field

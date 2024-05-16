@@ -24,3 +24,63 @@ spec:
           requests:
             cpu: "0.5" # Add this line
             memory: "256Mi" # Add this line
+            ---
+            apiVersion: argoproj.io/v1alpha1
+            kind: Rollout
+            metadata:
+              name: ai-planet-rollout
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: ai-planet
+              template:
+                metadata:
+                  labels:
+                    app: ai-planet
+                spec:
+                  containers:
+                  - name: ai-planet-container
+                    image: amazingatul/ai-planet:latest
+                    ports:
+                    - containerPort: 5000
+                    resources:
+                      limits:
+                        cpu: "1"
+                        memory: "512Mi"
+                      requests:
+                        cpu: "0.5"
+                        memory: "256Mi"
+              strategy:
+                canary:
+                  steps:
+                  - setWeight: 10
+                    pause:
+                      duration: 10s
+                  - setWeight: 20
+                    pause:
+                      duration: 10s
+                  - setWeight: 30
+                    pause:
+                      duration: 10s
+                  - setWeight: 40
+                    pause:
+                      duration: 10s
+                  - setWeight: 50
+                    pause:
+                      duration: 10s
+                  - setWeight: 60
+                    pause:
+                      duration: 10s
+                  - setWeight: 70
+                    pause:
+                      duration: 10s
+                  - setWeight: 80
+                    pause:
+                      duration: 10s
+                  - setWeight: 90
+                    pause:
+                      duration: 10s
+                  - setWeight: 100
+              maxSurge: 1
+              maxUnavailable: 0
